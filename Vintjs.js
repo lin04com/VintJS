@@ -117,6 +117,12 @@
         return obj.hasOwnProperty(attr);
     };
 
+    /**
+     * @name VintJS.restObj
+     * @param obj
+     * @description
+     * 清空对象的所有属性以及方法。
+     */
     VintJS.restObj = function (obj) {
         for (var prop in obj) {
             delete obj[prop];
@@ -501,6 +507,15 @@ VintJS.route = {
         return this;
     },
 
+    resources: function (name) {
+        var __name = name[0].toUpperCase() + name.substring(1),
+            __names = name + 's';
+        this.when('/' + __names, {template: name + '/list', controller: __name + 'ListCtrl'});
+        this.when('/' + __names + '/add', {template: name + '/add', controller: __name + 'AddCtrl'});
+        this.when('/' + __names + '/:number', {template: name + '/get', controller: __name + 'GetCtrl'});
+        this.when('/' + __names + '/edit/:number', {template: name + '/edit', controller: __name + 'EditCtrl'});
+    },
+
     otherwise: function (router_object) {
         this.__otherwise = router_object;
         return this;
@@ -532,9 +547,10 @@ VintJS.location.on('urlChange', VintJS.route.response, VintJS.route);
 VintJS.template = {
     __cache_sign: 'T_',
     __cache: (function () {
+        //如果不支持 localStorage 将在内存中储存模板文件。
         if (!window.localStorage)return false;
         var storage = window.localStorage;
-        //Clear old template cache.
+        //删除掉硬盘中所有之前缓存的模板文件。
         for (var i = 0; i < storage.length; i++) {
             var name = storage.key(i);
             if (name.indexOf('T_') === 0) {

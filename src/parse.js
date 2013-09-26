@@ -1,0 +1,3 @@
+VintJS.parse = {
+
+};

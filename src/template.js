@@ -1,9 +1,10 @@
 VintJS.template = {
     __cache_sign: 'T_',
     __cache: (function () {
+        //如果不支持 localStorage 将在内存中储存模板文件。
         if (!window.localStorage)return false;
         var storage = window.localStorage;
-        //Clear old template cache.
+        //删除掉硬盘中所有之前缓存的模板文件。
         for (var i = 0; i < storage.length; i++) {
             var name = storage.key(i);
             if (name.indexOf('T_') === 0) {

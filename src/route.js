@@ -57,6 +57,15 @@ VintJS.route = {
         return this;
     },
 
+    resources: function (name) {
+        var __name = name[0].toUpperCase() + name.substring(1),
+            __names = name + 's';
+        this.when('/' + __names, {template: name + '/list', controller: __name + 'ListCtrl'});
+        this.when('/' + __names + '/add', {template: name + '/add', controller: __name + 'AddCtrl'});
+        this.when('/' + __names + '/:number', {template: name + '/get', controller: __name + 'GetCtrl'});
+        this.when('/' + __names + '/edit/:number', {template: name + '/edit', controller: __name + 'EditCtrl'});
+    },
+
     otherwise: function (router_object) {
         this.__otherwise = router_object;
         return this;

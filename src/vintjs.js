@@ -117,6 +117,12 @@
         return obj.hasOwnProperty(attr);
     };
 
+    /**
+     * @name VintJS.restObj
+     * @param obj
+     * @description
+     * 清空对象的所有属性以及方法。
+     */
     VintJS.restObj = function (obj) {
         for (var prop in obj) {
             delete obj[prop];
