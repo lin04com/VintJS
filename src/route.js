@@ -6,6 +6,8 @@ VintJS.route = {
 
     __otherwise: null,
 
+    __name_spliter: /\s+/,
+
     __pre_treat_role: function () {
         var old_routers = VintJS.__getTempArray.apply(this, this.__routers);
         this.__routers.length = 0;
@@ -58,12 +60,22 @@ VintJS.route = {
     },
 
     resources: function (name) {
+        if (this.__name_spliter.test(name)) {
+            return this.resources(name.split(this.__name_spliter));
+        }
+        if (VintJS.isType('array')) {
+            VintJS.forEach(name, function (item) {
+                this.resources(item);
+            }, this);
+            return this;
+        }
         var __name = name[0].toUpperCase() + name.substring(1),
             __names = name + 's';
         this.when('/' + __names, {template: name + '/list', controller: __name + 'ListCtrl'});
         this.when('/' + __names + '/add', {template: name + '/add', controller: __name + 'AddCtrl'});
         this.when('/' + __names + '/:number', {template: name + '/get', controller: __name + 'GetCtrl'});
         this.when('/' + __names + '/edit/:number', {template: name + '/edit', controller: __name + 'EditCtrl'});
+        return this;
     },
 
     otherwise: function (router_object) {
