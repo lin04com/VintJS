@@ -10,7 +10,9 @@ module.exports = function (grunt) {
                     'src/vintjs.js',
                     'src/location.js',
                     'src/route.js',
-                    'src/template.js'
+                    'src/template.js',
+                    'src/directive.js',
+                    'src/directive/*.js'
                 ],
                 dest: 'Vintjs.js'
             }
