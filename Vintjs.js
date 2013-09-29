@@ -423,7 +423,7 @@ VintJS.location = {
         return this;
     },
 
-    search: function (key, value) {
+    search: function (key, value, delay) {
         if (arguments.length === 1) {
             if (VintJS.isType(key, 'string')) {
                 return this.__current_location.search[key];
@@ -431,13 +431,13 @@ VintJS.location = {
             if (VintJS.isType(key, 'object')) {
                 this.__current_location.search = key;
             }
-        }
-        if (arguments.length === 2) {
+        }else{
             if (value === null) {
                 delete this.__current_location.search[key];
             } else {
                 this.__current_location.search[key] = value;
             }
+            if (delay)return this;
         }
         this.url(this.__getResultUrl());
         return this;
@@ -488,7 +488,7 @@ VintJS.route = {
             return this;
         }
         if (router_object['login_required'] && !VintJS.getConfig('getCurrentUser').call(this)) {
-            if (VintJS.location.path() != '/')VintJS.location.search('redirect', VintJS.location.path());
+            if (VintJS.location.path() != '/')VintJS.location.search('redirect', VintJS.location.path(), true);
             this.redirectTo(VintJS.getConfig('login_url'), true);
             return this;
         }
@@ -536,7 +536,7 @@ VintJS.route = {
         if (this.__name_spliter.test(name)) {
             return this.resources(name.split(this.__name_spliter), options);
         }
-        if (VintJS.isType('array')) {
+        if (VintJS.isType(name, 'array')) {
             VintJS.forEach(name, function (item) {
                 this.resources(item, options);
             }, this);

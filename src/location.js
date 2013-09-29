@@ -106,7 +106,7 @@ VintJS.location = {
         return this;
     },
 
-    search: function (key, value) {
+    search: function (key, value, delay) {
         if (arguments.length === 1) {
             if (VintJS.isType(key, 'string')) {
                 return this.__current_location.search[key];
@@ -114,13 +114,13 @@ VintJS.location = {
             if (VintJS.isType(key, 'object')) {
                 this.__current_location.search = key;
             }
-        }
-        if (arguments.length === 2) {
+        }else{
             if (value === null) {
                 delete this.__current_location.search[key];
             } else {
                 this.__current_location.search[key] = value;
             }
+            if (delay)return this;
         }
         this.url(this.__getResultUrl());
         return this;

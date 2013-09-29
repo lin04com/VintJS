@@ -26,7 +26,7 @@ VintJS.route = {
             return this;
         }
         if (router_object['login_required'] && !VintJS.getConfig('getCurrentUser').call(this)) {
-            if (VintJS.location.path() != '/')VintJS.location.search('redirect', VintJS.location.path());
+            if (VintJS.location.path() != '/')VintJS.location.search('redirect', VintJS.location.path(), true);
             this.redirectTo(VintJS.getConfig('login_url'), true);
             return this;
         }
@@ -74,7 +74,7 @@ VintJS.route = {
         if (this.__name_spliter.test(name)) {
             return this.resources(name.split(this.__name_spliter), options);
         }
-        if (VintJS.isType('array')) {
+        if (VintJS.isType(name, 'array')) {
             VintJS.forEach(name, function (item) {
                 this.resources(item, options);
             }, this);
