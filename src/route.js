@@ -56,14 +56,14 @@ VintJS.route = {
     when: function (role, router, options) {
         var router_object;
         if (VintJS.isType(router, 'object') && VintJS.isType(options, 'undefined')) {
-            router_object = VintJS.copy(router);
+            router_object = VintJS.copy({}, router);
         } else if (VintJS.isType(router, 'string')) {
-            router_object = VintJS.copy(options);
+            router_object = options ? VintJS.copy({}, options) : {};
             var hash_index = router.indexOf('#');
             router_object.ctrl = router.substring(0, hash_index);
             router_object.action = router.substring(hash_index + 1, router.length);
             router_object.template = VintJS.__getTempArray(router_object.ctrl, router_object.action).join('/');
-        } else if (VintJS.isType(router, 'function')){
+        } else if (VintJS.isType(router, 'function')) {
             router_object = router;
         }
         this.__routers.push({role: role, router_object: router_object});
