@@ -117,6 +117,18 @@
         return obj.hasOwnProperty(attr);
     };
 
+
+    VintJS.copy = function (defaults, source) {
+        for (var p in source) {
+            if (source.hasOwnProperty(p)) {
+                var val = source[p];
+                defaults[p] = this.isType(val, 'object') ? this.copy({}, val) :
+                    this.isType(val, 'array') ? this.copy([], val) : val;
+            }
+        }
+        return defaults;
+    };
+
     /**
      * @name VintJS.restObj
      * @param obj
@@ -475,7 +487,6 @@ VintJS.route = {
             router_object.apply(this, params);
             return this;
         }
-        if (!VintJS.isType(router_object, 'object'))return this;
         if (router_object['login_required'] && !VintJS.getConfig('getCurrentUser').call(this)) {
             if (VintJS.location.path() != '/')VintJS.location.search('redirect', VintJS.location.path());
             this.redirectTo(VintJS.getConfig('login_url'), true);
@@ -485,11 +496,11 @@ VintJS.route = {
             this.redirectTo(router_object['redirect_to']);
             return this;
         }
-        this.render(router_object['template'], router_object['controller'], params);
+        this.render(router_object['template'], router_object['ctrl'], router_object['action'], params);
         return this;
     },
 
-    render: function (template, controller, params) {
+    render: function (template, controller, action, params) {
         console.log(params);
         //TODO It's time to render html.
         return this;
@@ -504,27 +515,37 @@ VintJS.route = {
         return this;
     },
 
-    when: function (role, router_object) {
+    when: function (role, router, options) {
+        var router_object;
+        if (VintJS.isType(router, 'object') && VintJS.isType(options, 'undefined')) {
+            router_object = VintJS.copy(router);
+        } else if (VintJS.isType(router, 'string')) {
+            router_object = VintJS.copy(options);
+            var hash_index = router.indexOf('#');
+            router_object.ctrl = router.substring(0, hash_index);
+            router_object.action = router.substring(hash_index + 1, router.length);
+            router_object.template = VintJS.__getTempArray(router_object.ctrl, router_object.action).join('/');
+        } else if (VintJS.isType(router, 'function')){
+            router_object = router;
+        }
         this.__routers.push({role: role, router_object: router_object});
         return this;
     },
 
-    resources: function (name) {
+    resources: function (name, options) {
         if (this.__name_spliter.test(name)) {
-            return this.resources(name.split(this.__name_spliter));
+            return this.resources(name.split(this.__name_spliter), options);
         }
         if (VintJS.isType('array')) {
             VintJS.forEach(name, function (item) {
-                this.resources(item);
+                this.resources(item, options);
             }, this);
             return this;
         }
-        var __name = name[0].toUpperCase() + name.substring(1),
-            __names = name + 's';
-        this.when('/' + __names, {template: name + '/list', controller: __name + 'ListCtrl'});
-        this.when('/' + __names + '/add', {template: name + '/add', controller: __name + 'AddCtrl'});
-        this.when('/' + __names + '/:number', {template: name + '/get', controller: __name + 'GetCtrl'});
-        this.when('/' + __names + '/edit/:number', {template: name + '/edit', controller: __name + 'EditCtrl'});
+        this.when('/' + name, name + '#index', options);
+        this.when('/' + name + '/new', name + '#new', options);
+        this.when('/' + name + '/:all', name + '#show', options);
+        this.when('/' + name + '/:all/edit', name + '#edit', options);
         return this;
     },
 
@@ -598,4 +619,7 @@ VintJS.template = {
         });
         return this
     }
+};
+VintJS.parse = {
+
 };

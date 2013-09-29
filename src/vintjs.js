@@ -117,6 +117,18 @@
         return obj.hasOwnProperty(attr);
     };
 
+
+    VintJS.copy = function (defaults, source) {
+        for (var p in source) {
+            if (source.hasOwnProperty(p)) {
+                var val = source[p];
+                defaults[p] = this.isType(val, 'object') ? this.copy({}, val) :
+                    this.isType(val, 'array') ? this.copy([], val) : val;
+            }
+        }
+        return defaults;
+    };
+
     /**
      * @name VintJS.restObj
      * @param obj
