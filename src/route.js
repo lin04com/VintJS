@@ -8,25 +8,25 @@ VintJS.route = {
 
     __name_spliter: /\s+/,
 
-    __pre_treat_role: function () {
+    __pre_treat_role: function() {
         var old_routers = VintJS.__getTempArray.apply(this, this.__routers);
         this.__routers.length = 0;
-        VintJS.forEach(old_routers, function (old_router) {
+        VintJS.forEach(old_routers, function(old_router) {
             if (!VintJS.isType(old_router.role, 'regExp')) {
                 old_router.role = new RegExp('^' + old_router.role.replace(/:number/g, '(\\d+)')
-                    .replace(/:string/g, '(\\w+)').replace(/:all/g, '(.+)') + '$')
+                    .replace(/:string/g, '(\\w+)').replace(/:all/g, '(.+)') + '$');
             }
             this.__routers.push(old_router);
         }, this);
     },
 
-    __use: function (router_object, params) {
+    __use: function(router_object, params) {
         if (VintJS.isType(router_object, 'function')) {
             router_object.apply(this, params);
             return this;
         }
         if (router_object['login_required'] && !VintJS.getConfig('getCurrentUser').call(this)) {
-            if (VintJS.location.path() != '/')VintJS.location.search('redirect', VintJS.location.path(), true);
+            if (VintJS.location.path() != '/') VintJS.location.search('redirect', VintJS.location.path(), true);
             this.redirectTo(VintJS.getConfig('login_url'), true);
             return this;
         }
@@ -38,13 +38,15 @@ VintJS.route = {
         return this;
     },
 
-    render: function (template, controller, action, params) {
-        console.log(params);
+    render: function(template, controller, action, params) {
+        VintJS.template.get(template, function(content) {
+            $('#vint-view').html(content);
+        }, this);
         //TODO It's time to render html.
         return this;
     },
 
-    redirectTo: function (url, replace) {
+    redirectTo: function(url, replace) {
         if (replace) {
             VintJS.location.replace(url);
         } else {
@@ -53,7 +55,7 @@ VintJS.route = {
         return this;
     },
 
-    when: function (role, router, options) {
+    when: function(role, router, options) {
         var router_object;
         if (VintJS.isType(router, 'object') && VintJS.isType(options, 'undefined')) {
             router_object = VintJS.copy({}, router);
@@ -66,16 +68,19 @@ VintJS.route = {
         } else if (VintJS.isType(router, 'function')) {
             router_object = router;
         }
-        this.__routers.push({role: role, router_object: router_object});
+        this.__routers.push({
+            role: role,
+            router_object: router_object
+        });
         return this;
     },
 
-    resources: function (name, options) {
+    resources: function(name, options) {
         if (this.__name_spliter.test(name)) {
             return this.resources(name.split(this.__name_spliter), options);
         }
         if (VintJS.isType(name, 'array')) {
-            VintJS.forEach(name, function (item) {
+            VintJS.forEach(name, function(item) {
                 this.resources(item, options);
             }, this);
             return this;
@@ -87,12 +92,12 @@ VintJS.route = {
         return this;
     },
 
-    otherwise: function (router_object) {
+    otherwise: function(router_object) {
         this.__otherwise = router_object;
         return this;
     },
 
-    response: function () {
+    response: function() {
         if (!this.__route_init) {
             this.__pre_treat_role();
             this.__route_init = true;
@@ -107,7 +112,7 @@ VintJS.route = {
                 return this;
             }
         }
-        if (this.__otherwise)this.__use(this.__otherwise);
+        if (this.__otherwise) this.__use(this.__otherwise);
 
         return this;
     }

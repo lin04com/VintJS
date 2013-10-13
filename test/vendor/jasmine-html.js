@@ -487,7 +487,7 @@ jasmine.HtmlReporter.SuiteView.prototype.refresh = function() {
 
 jasmine.HtmlReporterHelpers.addHelpers(jasmine.HtmlReporter.SuiteView);
 
-/* @deprecated Use jasmine.HtmlReporter instead
+/* @deprecated Use vendor.HtmlReporter instead
  */
 jasmine.TrivialReporter = function(doc) {
   this.document = doc || document;

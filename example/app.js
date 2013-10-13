@@ -18,7 +18,7 @@
     app.route
         .when('/', function () {
             $('body').html('Here is homepage,and will redirect to index in 2 min.');
-            app.setTimeout(function () {
+            VintJS.setTimeout(function () {
                 this.redirectTo('/index');
             }, 2000, this);
         })
@@ -35,7 +35,9 @@
         .resources('posts')
         .otherwise({
             redirect_to: '/404'
-        })
+        });
+
+    window.app = app;
 
 
 }).call(window);

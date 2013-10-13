@@ -27,7 +27,7 @@
 
         nativeForEach = Array.prototype.forEach,
         forEach = VintJS.forEach = function (obj, iterator, context) {
-            if (obj == null) return;
+            if (obj === null) return;
             if (nativeForEach && obj.forEach === nativeForEach) {
                 obj.forEach(iterator, context);
             } else if (obj.length === +obj.length) {
@@ -56,7 +56,7 @@
             if (obj !== Object(obj)) throw new TypeError('Invalid object');
             var keys = [];
             forEach(obj, function (value, key) {
-                keys.push(key);
+                keys.push(key + '');
             }, this);
             return keys;
         },
@@ -155,7 +155,7 @@
     VintJS.setTimeout = function (callback, time, context) {
         context = context || root;
         return setTimeout(function () {
-            callback.call(context)
+            callback.call(context);
         }, time);
     };
 
@@ -163,7 +163,7 @@
     VintJS.setInterval = function (callback, time, context) {
         context = context || root;
         return setInterval(function () {
-            callback.call(context)
+            callback.call(context);
         }, time);
     };
 
@@ -181,6 +181,7 @@
         this.template.get('base', function (content) {
             VintJS.$init.html(content);
             this.location.listen();
+            
         }, this);
         return this;
     };
@@ -231,7 +232,7 @@
          */
         on: function (name, callback, context) {
             if (!__eventAnalyze(this, 'on', name, [callback, context]) || !callback) return this;
-            this.__events || (this.__events = {});
+            this.__events || (this.__events = {});;
             var events = this.__events[name] || (this.__events[name] = []);
             events.push({callback: callback, context: context, ctx: context || this});
             return this;
@@ -263,7 +264,7 @@
                     }
                 });
             } else {
-                names = name ? [name] : getKeys(this.__events)
+                names = name ? [name] : getKeys(this.__events);
             }
             forEach(names, function (name) {
                 if (events = this.__events[name]) {

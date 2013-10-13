@@ -15,7 +15,7 @@ jasmine.unimplementedMethod_ = function() {
 };
 
 /**
- * Use <code>jasmine.undefined</code> instead of <code>undefined</code>, since <code>undefined</code> is just
+ * Use <code>vendor.undefined</code> instead of <code>undefined</code>, since <code>undefined</code> is just
  * a plain old variable and may be redefined by somebody else.
  *
  * @private
@@ -45,7 +45,7 @@ jasmine.MAX_PRETTY_PRINT_DEPTH = 40;
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
 
 /**
- * By default exceptions thrown in the context of a test are caught by jasmine so that it can run the remaining tests in the suite.
+ * By default exceptions thrown in the context of a test are caught by vendor so that it can run the remaining tests in the suite.
  * Set to false to let the exception bubble up in the browser.
  *
  */
@@ -199,7 +199,7 @@ jasmine.isDomNode = function(obj) {
  *
  * @example
  * // don't care about which function is passed in, as long as it's a function
- * expect(mySpy).toHaveBeenCalledWith(jasmine.any(Function));
+ * expect(mySpy).toHaveBeenCalledWith(vendor.any(Function));
  *
  * @param {Class} clazz
  * @returns matchable object of the type clazz
@@ -214,7 +214,7 @@ jasmine.any = function(clazz) {
  *
  * @example
  * // don't care about any other attributes than foo.
- * expect(mySpy).toHaveBeenCalledWith(jasmine.objectContaining({foo: "bar"});
+ * expect(mySpy).toHaveBeenCalledWith(vendor.objectContaining({foo: "bar"});
  *
  * @param sample {Object} sample
  * @returns matchable object for the sample
@@ -233,11 +233,11 @@ jasmine.objectContaining = function (sample) {
  *
  * Spies are torn down at the end of every spec.
  *
- * Note: Do <b>not</b> call new jasmine.Spy() directly - a spy must be created using spyOn, jasmine.createSpy or jasmine.createSpyObj.
+ * Note: Do <b>not</b> call new vendor.Spy() directly - a spy must be created using spyOn, vendor.createSpy or vendor.createSpyObj.
  *
  * @example
  * // a stub
- * var myStub = jasmine.createSpy('myStub');  // can be used anywhere
+ * var myStub = vendor.createSpy('myStub');  // can be used anywhere
  *
  * // spy example
  * var foo = {
@@ -264,7 +264,7 @@ jasmine.objectContaining = function (sample) {
  * expect(foo.not).toHaveBeenCalledWith(true);
  *
  * @constructor
- * @see spyOn, jasmine.createSpy, jasmine.createSpyObj
+ * @see spyOn, vendor.createSpy, vendor.createSpyObj
  * @param {String} name
  */
 jasmine.Spy = function(name) {
@@ -284,7 +284,7 @@ jasmine.Spy = function(name) {
   /**
    * Tracking of the most recent call to the spy.
    * @example
-   * var mySpy = jasmine.createSpy('foo');
+   * var mySpy = vendor.createSpy('foo');
    * mySpy(1, 2);
    * mySpy.mostRecentCall.args = [1, 2];
    */
@@ -293,7 +293,7 @@ jasmine.Spy = function(name) {
   /**
    * Holds arguments for each call to the spy, indexed by call count
    * @example
-   * var mySpy = jasmine.createSpy('foo');
+   * var mySpy = vendor.createSpy('foo');
    * mySpy(1, 2);
    * mySpy(7, 8);
    * mySpy.mostRecentCall.args = [7, 8];
@@ -325,7 +325,7 @@ jasmine.Spy.prototype.andCallThrough = function() {
  *
  * @example
  * // defining a spy from scratch: foo() returns 'baz'
- * var foo = jasmine.createSpy('spy on foo').andReturn('baz');
+ * var foo = vendor.createSpy('spy on foo').andReturn('baz');
  *
  * // defining a spy on an existing property: foo.bar() returns 'baz'
  * spyOn(foo, 'bar').andReturn('baz');
@@ -344,7 +344,7 @@ jasmine.Spy.prototype.andReturn = function(value) {
  *
  * @example
  * // defining a spy from scratch: foo() throws an exception w/ message 'ouch'
- * var foo = jasmine.createSpy('spy on foo').andThrow('baz');
+ * var foo = vendor.createSpy('spy on foo').andThrow('baz');
  *
  * // defining a spy on an existing property: foo.bar() throws an exception w/ message 'ouch'
  * spyOn(foo, 'bar').andThrow('baz');
@@ -366,7 +366,7 @@ jasmine.Spy.prototype.andThrow = function(exceptionMsg) {
  *   // do some stuff, return something
  * }
  * // defining a spy from scratch: foo() calls the function baz
- * var foo = jasmine.createSpy('spy on foo').andCall(baz);
+ * var foo = vendor.createSpy('spy on foo').andCall(baz);
  *
  * // defining a spy on an existing property: foo.bar() calls an anonymnous function
  * spyOn(foo, 'bar').andCall(function() { return 'baz';} );
@@ -455,7 +455,7 @@ jasmine.createSpyObj = function(baseName, methodNames) {
 /**
  * All parameters are pretty-printed and concatenated together, then written to the current spec's output.
  *
- * Be careful not to leave calls to <code>jasmine.log</code> in production code.
+ * Be careful not to leave calls to <code>vendor.log</code> in production code.
  */
 jasmine.log = function() {
   var spec = jasmine.getEnv().currentSpec;
@@ -517,7 +517,7 @@ if (isCommonJS) exports.xit = xit;
  * Starts a chain for a Jasmine expectation.
  *
  * It is passed an Object that is the actual value and should chain to one of the many
- * jasmine.Matchers functions.
+ * vendor.Matchers functions.
  *
  * @param {Object} actual Actual value to test against and expected value
  * @return {jasmine.Matchers}
@@ -528,9 +528,9 @@ var expect = function(actual) {
 if (isCommonJS) exports.expect = expect;
 
 /**
- * Defines part of a jasmine spec.  Used in cominbination with waits or waitsFor in asynchrnous specs.
+ * Defines part of a vendor spec.  Used in cominbination with waits or waitsFor in asynchrnous specs.
  *
- * @param {Function} func Function that defines part of a jasmine spec.
+ * @param {Function} func Function that defines part of a vendor spec.
  */
 var runs = function(func) {
   jasmine.getEnv().currentSpec.runs(func);
@@ -749,7 +749,7 @@ jasmine.Env.prototype.setInterval = jasmine.setInterval;
 jasmine.Env.prototype.clearInterval = jasmine.clearInterval;
 
 /**
- * @returns an object containing jasmine version build info, if set.
+ * @returns an object containing vendor version build info, if set.
  */
 jasmine.Env.prototype.version = function () {
   if (jasmine.version_) {
@@ -760,7 +760,7 @@ jasmine.Env.prototype.version = function () {
 };
 
 /**
- * @returns string containing jasmine version build info, if set.
+ * @returns string containing vendor version build info, if set.
  */
 jasmine.Env.prototype.versionString = function() {
   if (!jasmine.version_) {
@@ -1186,12 +1186,12 @@ jasmine.Matchers = function(env, actual, spec, opt_isNot) {
 
 // todo: @deprecated as of Jasmine 0.11, remove soon [xw]
 jasmine.Matchers.pp = function(str) {
-  throw new Error("jasmine.Matchers.pp() is no longer supported, please use jasmine.pp() instead!");
+  throw new Error("jasmine.Matchers.pp() is no longer supported, please use vendor.pp() instead!");
 };
 
 // todo: @deprecated Deprecated as of Jasmine 0.10. Rewrite your custom matchers to return true or false. [xw]
 jasmine.Matchers.prototype.report = function(result, failing_message, details) {
-  throw new Error("As of jasmine 0.11, custom matchers must be implemented differently -- please see jasmine docs");
+  throw new Error("As of vendor 0.11, custom matchers must be implemented differently -- please see vendor docs");
 };
 
 jasmine.Matchers.wrapInto_ = function(prototype, matchersClass) {
@@ -1274,7 +1274,7 @@ jasmine.Matchers.prototype.toEqual = function(expected) {
 };
 
 /**
- * toNotEqual: compares the actual to the expected using the ! of jasmine.Matchers.toEqual
+ * toNotEqual: compares the actual to the expected using the ! of vendor.Matchers.toEqual
  * @param expected
  * @deprecated as of 1.0. Use not.toEqual() instead.
  */
@@ -1293,7 +1293,7 @@ jasmine.Matchers.prototype.toMatch = function(expected) {
 };
 
 /**
- * Matcher that compares the actual to the expected using the boolean inverse of jasmine.Matchers.toMatch
+ * Matcher that compares the actual to the expected using the boolean inverse of vendor.Matchers.toMatch
  * @param expected
  * @deprecated as of 1.0. Use not.toMatch() instead.
  */
@@ -1302,14 +1302,14 @@ jasmine.Matchers.prototype.toNotMatch = function(expected) {
 };
 
 /**
- * Matcher that compares the actual to jasmine.undefined.
+ * Matcher that compares the actual to vendor.undefined.
  */
 jasmine.Matchers.prototype.toBeDefined = function() {
   return (this.actual !== jasmine.undefined);
 };
 
 /**
- * Matcher that compares the actual to jasmine.undefined.
+ * Matcher that compares the actual to vendor.undefined.
  */
 jasmine.Matchers.prototype.toBeUndefined = function() {
   return (this.actual === jasmine.undefined);
@@ -1542,7 +1542,7 @@ jasmine.Matchers.Any.prototype.jasmineMatches = function(other) {
 };
 
 jasmine.Matchers.Any.prototype.jasmineToString = function() {
-  return '<jasmine.any(' + this.expectedClass + ')>';
+  return '<vendor.any(' + this.expectedClass + ')>';
 };
 
 jasmine.Matchers.ObjectContaining = function (sample) {
@@ -1572,7 +1572,7 @@ jasmine.Matchers.ObjectContaining.prototype.jasmineMatches = function(other, mis
 };
 
 jasmine.Matchers.ObjectContaining.prototype.jasmineToString = function () {
-  return "<jasmine.objectContaining(" + jasmine.pp(this.sample) + ")>";
+  return "<vendor.objectContaining(" + jasmine.pp(this.sample) + ")>";
 };
 // Mock setTimeout, clearTimeout
 // Contributed by Pivotal Computer Systems, www.pivotalsf.com
@@ -1712,7 +1712,7 @@ jasmine.Clock = {
 
   assertInstalled: function() {
     if (!jasmine.Clock.isInstalled()) {
-      throw new Error("Mock clock is not installed, use jasmine.Clock.useMock()");
+      throw new Error("Mock clock is not installed, use vendor.Clock.useMock()");
     }
   },
 
@@ -1793,7 +1793,7 @@ jasmine.MultiReporter.prototype.addReporter = function(reporter) {
   }
 })();
 /**
- * Holds results for a set of Jasmine spec. Allows for the results array to hold another jasmine.NestedResults
+ * Holds results for a set of Jasmine spec. Allows for the results array to hold another vendor.NestedResults
  *
  * @constructor
  */
@@ -2239,7 +2239,7 @@ jasmine.Spec.prototype.results = function() {
 /**
  * All parameters are pretty-printed and concatenated together, then written to the spec's output.
  *
- * Be careful not to leave calls to <code>jasmine.log</code> in production code.
+ * Be careful not to leave calls to <code>vendor.log</code> in production code.
  */
 jasmine.Spec.prototype.log = function() {
   return this.results_.log(arguments);

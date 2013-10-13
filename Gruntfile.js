@@ -2,10 +2,8 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         concat: {
-            options: {
-                separator: '\n'
-            },
-            dist: {
+            main: {
+
                 src: [
                     'src/vintjs.js',
                     'src/location.js',
@@ -16,7 +14,16 @@ module.exports = function (grunt) {
                     'src/extra/*.js'
                 ],
                 dest: 'Vintjs.js'
+            },
+            test: {
+
+                src: [
+                    'test/cases/*.js',
+                    'test/cases/*/*.js'
+                ],
+                dest: 'test/test.js'
             }
+
         },
         uglify: {
             build: {
@@ -27,7 +34,7 @@ module.exports = function (grunt) {
         },
         watch: {
             src: {
-                files: ['src/*.js', 'src/*/*.js'],
+                files: ['src/*.js', 'src/*/*.js', 'test/cases/*.js', 'test/cases/*/*.js'],
                 tasks: ['development']
             }
         }
